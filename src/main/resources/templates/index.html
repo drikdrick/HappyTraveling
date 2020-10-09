@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>Happy Traveling</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://use.fontawesome.com/86329be658.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script>
+$(document).ready(function(){
+  $("#hide").click(function(){
+    $("#formDeparture").hide();
+    $("#hide").hide();
+    $("#show").show();
+  });
+  $("#show").click(function(){
+    $("#formDeparture").show();
+    $("#show").hide();
+    $("#hide").show();
+  });
+});
+
+$(document).ready(function(){
+	  $("#hideDeparture").click(function(){
+	    $("#dataDeparture").hide();
+	    $("#hideDeparture").hide();
+	    $("#showDeparture").show();
+	  });
+	  $("#showDeparture").click(function(){
+	    $("#dataDeparture").show();
+	    $("#showDeparture").hide();
+	    $("#hideDeparture").show();
+	  });
+	});
+</script>
+</head>
+<body>
+
+	<!-- navigation bar (header) -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" th:href="@{/}">Happy Traveling</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+	</nav>
+
+<br>
+<br>
+
+	<div class="container">
+		<h1>Berhasil login!!!</h1>
+		Selamat Datang <span sec:authentication="principal.username">User</span>
+		&emsp;<span sec:authentication="principal.authorities">User</span>
+	</div>
+	<div sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="col-md-6">
+		Selamat datang admin!!! <br>
+		
+		<a th:href="@{/showNewDepartureForm}" class="btn btn-primary">Tambah Departure</a>
+		
+		<button class="btn btn-primary" id="showDeparture">Lihat data asal/tujuan &emsp;<span class=" fa fa-sort-desc"></span></button>
+		<button id="hideDeparture" class="toshow btn btn-warning" style="display:none">Sembunyikan&emsp; <span class="fa fa-sort-up"></span></button>
+		
+			
+			<table class="table table-hover toshow" style="display:none; width:500px;" id="dataDeparture">
+		  <thead>
+		    <tr>
+		      <th scope="col">No</th>
+		      <th scope="col">Nama Kota Asal/Tujuan</th>
+		      <th scope="col">Action</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:each="departure : ${listDeparture}">
+		      <th th:text="${departure.id}"></th>
+		      <td th:text="${departure.name}"></td>
+		      <td>
+		      	<a th:href="@{/showFormForUpdate/{id}(id=${departure.id})}" class="btn btn-warning">Update</a>
+		      	<a th:href="@{/deleteDeparture/{id}(id=${departure.id})}" class="btn btn-danger">Hapus</a>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+			<h2>Data Booking Tiket</h2>
+			<table class="table table-hover" id="dataDeparture">
+		  <thead>
+		    <tr>
+		      <th scope="col">No</th>
+		      <th scope="col">Nama</th>
+		      <th scope="col">Asal</th>
+		      <th scope="col">Tujuan</th>
+		      <th scope="col">Departure Date</th>
+		      <th scope="col">Return Date</th>
+		      <th scope="col">Action</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:each="transaction : ${listTransaction}">
+		      <th th:text="${transaction.id}"></th>
+		      <td th:text="${transaction.nama}"></td>
+		      <td th:text="${transaction.from}"></td>
+		       <td th:text="${transaction.to}"></td>
+		       <td th:text="${transaction.departureDate}"></td>
+		       <td th:text="${transaction.returnDate}"></td>
+		      <td>
+		      	<a th:href="@{/deleteTransaction/{id}(id=${transaction.id})}" class="btn btn-danger">Hapus</a>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+			
+		
+		
+		
+	</div>
+	<div sec:authorize="hasAnyAuthority('ROLE_USER')" style="width:60%;margin:50px;">
+		Selamat datang user!!! <br>
+		
+		<a th:href="@{/showNewDepartureBook}">Booking Travel</a>
+	</div>
+
+</body>
+</html>

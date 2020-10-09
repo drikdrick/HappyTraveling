@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>Happy Traveling</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://use.fontawesome.com/86329be658.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script>
+$(document).ready(function(){
+  $("#hide").click(function(){
+    $("#formDeparture").hide();
+    $("#hide").hide();
+    $("#show").show();
+  });
+  $("#show").click(function(){
+    $("#formDeparture").show();
+    $("#show").hide();
+    $("#hide").show();
+  });
+});
+
+$(document).ready(function(){
+	  $("#hideDeparture").click(function(){
+	    $("#dataDeparture").hide();
+	    $("#hideDeparture").hide();
+	    $("#showDeparture").show();
+	  });
+	  $("#showDeparture").click(function(){
+	    $("#dataDeparture").show();
+	    $("#showDeparture").hide();
+	    $("#hideDeparture").show();
+	  });
+	});
+</script>
+</head>
+<body>
+
+	<!-- navigation bar (header) -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" th:href="@{/}">Happy Traveling</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+	</nav>
+
+<br>
+<br>
+
+	<div class="container">
+		<h1>Berhasil login!!!</h1>
+		Selamat Datang <span sec:authentication="principal.username">User</span>
+		&emsp;<span sec:authentication="principal.authorities">User</span>
+	</div>
+		
+		<div style="width:500px;margin:50px;">
+		<h3>Booking Travel</h3>
+		<form action="#" th:action="@{/saveTransaksi}" th:object="${transaction}" method="post">
+		<div class="form-group">
+			    <label for="exampleFormControlInput1">Nama</label>
+			    <input type="text" class="form-control" th:field="*{nama}" id="exampleFormControlInput1" required placeholder="Masukkan nama anda ....">
+			  </div>
+			  <div class="form-group">
+			  <label>From</label>
+				<select class="form-control" th:field="*{from}" required>
+		             <option th:each="dropDownItem : ${listDeparture}" th:value="${dropDownItem.name}" th:text="${dropDownItem.name}" />
+		         </select>
+			</div>
+			 <div class="form-group">
+			  <label>To</label>
+				<select class="form-control" th:field="*{to}" required>
+		             <option th:each="dropDownItem : ${listDeparture}" th:value="${dropDownItem.name}" th:text="${dropDownItem.name}" />
+		         </select>
+			</div>
+			  <div class="form-group">
+			    <label for="exampleFormControlInput1">No. of Passengers</label>
+			    <input type="number" class="form-control" th:field="*{count_passengers}" id="exampleFormControlInput1" required placeholder="Masukkan jumlah penumpang...">
+			  </div>
+			  <div class="form-group">
+				  <label for="example-datetime-local-input">Departure Date</label>
+				    <input class="form-control" th:field="*{departureDate}" type="datetime-local" value="2011-08-19T13:45:00" required id="example-datetime-local-input">
+				</div>
+				
+				<div class="form-group">
+				  <label for="example-datetime-local-input">Return Date</label>
+				    <input class="form-control" type="datetime-local" th:field="*{returnDate}" value="2011-08-19T13:45:00" required id="example-datetime-local-input">
+				</div>
+			  
+			  
+			  <div class="form-group">
+				<input type="submit" name="login-submit" id="login-submit" class="form-control btn btn-primary" value="Book">
+			  </div>
+			</form>
+</div>
+</body>
+</html>
